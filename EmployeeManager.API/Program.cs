@@ -37,6 +37,7 @@ namespace EmployeeManager.API
 
             //Add dependency Injection for Application and Infrastructure layers
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeDepartmentAssignmentRepository, EmployeeDepartmentAssignmentRepository>();
 
             //Add dbContext
             builder.Services.AddDbContext<AppDbContext>(options =>

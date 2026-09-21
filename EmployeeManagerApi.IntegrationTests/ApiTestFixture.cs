@@ -1,9 +1,10 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using EmployeeManager.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EmployeeManagerApi.IntegrationTests;
 
@@ -52,7 +53,10 @@ public sealed class ApiTestFixture : IDisposable
         // Build the database before the first request reaches the API.
         ResetDatabase();
 
-        Client = Factory.CreateClient();
+        Client = Factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
     }
 
     /// <summary>

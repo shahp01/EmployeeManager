@@ -14,6 +14,7 @@ public class AppDbContext:DbContext
     //DbSet
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<EmployeeDepartmentAssignment> EmployeeDepartmentAssignments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,6 +37,13 @@ public class AppDbContext:DbContext
             entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
             entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
             entity.Property(e => e.DepartmentId);
+        });
+
+        modelBuilder.Entity<EmployeeDepartmentAssignment>(entity =>
+        {
+            entity.HasKey(a => a.AssignmentId);
+            entity.HasOne(a => a.Employee).WithMany().HasForeignKey(a => a.EmployeeId).OnDelete(DeleteBehavior.Restrict); //Restricting it from deleting the employee if there are assignments associated with it. This is to prevent accidental data loss.
+            entity.HasOne(a => a.Department).WithMany().HasForeignKey(a => a.DepartmentId).OnDelete(DeleteBehavior.Restrict); // same reason
         });
 
         //Seed the database with mock data. HasData writes these rows into the
